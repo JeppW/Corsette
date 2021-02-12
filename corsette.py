@@ -14,10 +14,10 @@ def strrev(s):
 def attempt(ori):
     try:
         return requests.get(target,headers={'Origin': ori,'User-Agent': agent, 'Referer': target, 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3','Accept-Encoding': 'none','Accept-Language': 'en-US,en;q=0.8'}, allow_redirects=True)
-	print(ori)
+        print(ori)
     except:
         print("[!] Error occurred... is the target up?\n")
-	sys.exit(1)
+        sys.exit(1)
 
 try:
     o = get_tld(target, as_object=True)
@@ -47,7 +47,7 @@ techniques = [
     ["Regex escape (Chrome/Firefox)", origin + "_hacker.com"],
     ["Regex escape (Safari)", origin + "`hacker.com"],
     ["Regex escape (Any browser)", strrev(strrev(origin)[strrev(origin).index(strrev(get_tld(origin))):]) + "-hacker.com"],
-    ["Regex escape (Safari)", strrev(strrev(origin)[strrev(origin).index(strrev(get_tld(origin))):]) + "=hacker.com"],
+    ["Regex escape (Safari)", strrev(strrev(origin)[strrev(origin).index(strrev(get_tld(origin))):]) + "=hacker.com"]
 ]
 
 print("[i] Starting CORS vulnerability scanning on host " + target + "...\n")
@@ -55,10 +55,10 @@ print("[i] Starting CORS vulnerability scanning on host " + target + "...\n")
 for i in techniques:
     res = attempt(i[1])
     if "Access-Control-Allow-Origin" in res.headers and "Access-Control-Allow-Credentials" in res.headers:
-	if not confirm_printed:
-		print("[i] Site supports CORS and Allow-Credentials\n")
-		confirm_printed = 1
-	if i[1] == res.headers["Access-Control-Allow-Origin"] and "true" == res.headers["Access-Control-Allow-Credentials"]:
+        if not confirm_printed:
+	        print("[i] Site supports CORS and Allow-Credentials\n")
+	        confirm_printed = 1
+        if i[1] == res.headers["Access-Control-Allow-Origin"] and "true" == res.headers["Access-Control-Allow-Credentials"]:
             print("\n[*] Successful exploitation technique discovered:\nTechnique: " + i[0] + "\nOrigin: " + i[1] + "\n")
             sys.exit()
         else:
@@ -66,4 +66,3 @@ for i in techniques:
             continue
 
 print("\n[!] No successful techniques were discovered.\n")
-
